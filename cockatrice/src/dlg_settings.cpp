@@ -3,6 +3,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QSpinBox>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QListWidget>
@@ -228,12 +229,17 @@ AppearanceSettingsPage::AppearanceSettingsPage()
 	handGroupBox = new QGroupBox;
 	handGroupBox->setLayout(handGrid);
 	
+	economicalGridCheckBox = new QCheckBox;
+	economicalGridCheckBox->setChecked(settingsCache->getEconomicalGrid());
+	connect(economicalGridCheckBox, SIGNAL(stateChanged(int)), settingsCache, SLOT(setEconomicalGrid(int)));
+	
 	invertVerticalCoordinateCheckBox = new QCheckBox;
 	invertVerticalCoordinateCheckBox->setChecked(settingsCache->getInvertVerticalCoordinate());
 	connect(invertVerticalCoordinateCheckBox, SIGNAL(stateChanged(int)), settingsCache, SLOT(setInvertVerticalCoordinate(int)));
 	
 	QGridLayout *tableGrid = new QGridLayout;
-	tableGrid->addWidget(invertVerticalCoordinateCheckBox, 0, 0, 1, 2);
+	tableGrid->addWidget(economicalGridCheckBox, 0, 0, 1, 2);
+	tableGrid->addWidget(invertVerticalCoordinateCheckBox, 1, 0, 1, 2);
 	
 	tableGroupBox = new QGroupBox;
 	tableGroupBox->setLayout(tableGrid);
@@ -274,6 +280,7 @@ void AppearanceSettingsPage::retranslateUi()
 	horizontalHandCheckBox->setText(tr("Display hand horizontally (wastes space)"));
 	
 	tableGroupBox->setTitle(tr("Table grid layout"));
+	economicalGridCheckBox->setText(tr("Economical layout"));
 	invertVerticalCoordinateCheckBox->setText(tr("Invert vertical coordinate"));
 	
 	zoneViewGroupBox->setTitle(tr("Zone view layout"));
@@ -367,8 +374,16 @@ UserInterfaceSettingsPage::UserInterfaceSettingsPage()
 	doubleClickToPlayCheckBox->setChecked(settingsCache->getDoubleClickToPlay());
 	connect(doubleClickToPlayCheckBox, SIGNAL(stateChanged(int)), settingsCache, SLOT(setDoubleClickToPlay(int)));
 	
+        cardInfoFontSizeLabel = new QLabel;
+        cardInfoFontSizeSpinBox = new QSpinBox;
+        cardInfoFontSizeSpinBox->setValue(settingsCache->getCardInfoFontSize());
+        connect(cardInfoFontSizeSpinBox, SIGNAL(valueChanged(int)), settingsCache, SLOT(setCardInfoFontSize(int)));
+
+
 	QGridLayout *generalGrid = new QGridLayout;
 	generalGrid->addWidget(doubleClickToPlayCheckBox, 0, 0);
+        generalGrid->addWidget(cardInfoFontSizeLabel, 1, 0);
+        generalGrid->addWidget(cardInfoFontSizeSpinBox, 1, 1);
 	
 	generalGroupBox = new QGroupBox;
 	generalGroupBox->setLayout(generalGrid);
@@ -396,6 +411,7 @@ void UserInterfaceSettingsPage::retranslateUi()
 	doubleClickToPlayCheckBox->setText(tr("&Double-click cards to play them (instead of single-click)"));
 	animationGroupBox->setTitle(tr("Animation settings"));
 	tapAnimationCheckBox->setText(tr("&Tap/untap animation"));
+        cardInfoFontSizeLabel->setText(tr("Card info font size:"));
 }
 
 MessagesSettingsPage::MessagesSettingsPage()

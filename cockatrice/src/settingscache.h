@@ -18,6 +18,7 @@ signals:
 	void cardBackPicturePathChanged();
 	void picDownloadChanged();
 	void horizontalHandChanged();
+	void economicalGridChanged();
 	void invertVerticalCoordinateChanged();
 private:
 	QSettings *settings;
@@ -29,9 +30,11 @@ private:
 	bool doubleClickToPlay;
 	bool cardInfoMinimized;
 	bool horizontalHand;
+	bool economicalGrid;
 	bool invertVerticalCoordinate;
 	bool tapAnimation;
 	bool zoneViewSortByName, zoneViewSortByType;
+        int cardInfoFontSize;
 public:
 	SettingsCache();
 	QString getLang() const { return lang; }
@@ -47,10 +50,12 @@ public:
 	bool getDoubleClickToPlay() const { return doubleClickToPlay; }
 	bool getCardInfoMinimized() const { return cardInfoMinimized; }
 	bool getHorizontalHand() const { return horizontalHand; }
+	bool getEconomicalGrid() const { return economicalGrid; }
 	bool getInvertVerticalCoordinate() const { return invertVerticalCoordinate; }
 	bool getTapAnimation() const { return tapAnimation; }
 	bool getZoneViewSortByName() const { return zoneViewSortByName; }
 	bool getZoneViewSortByType() const { return zoneViewSortByType; }
+        int getCardInfoFontSize() const { return cardInfoFontSize; }
 public slots:
 	void setLang(const QString &_lang);
 	void setDeckPath(const QString &_deckPath);
@@ -65,10 +70,12 @@ public slots:
 	void setDoubleClickToPlay(int _doubleClickToPlay);
 	void setCardInfoMinimized(bool _cardInfoMinimized);
 	void setHorizontalHand(int _horizontalHand);
+	void setEconomicalGrid(int _economicalGrid);
 	void setInvertVerticalCoordinate(int _invertVerticalCoordinate);
 	void setTapAnimation(int _tapAnimation);
 	void setZoneViewSortByName(int _zoneViewSortByName);
 	void setZoneViewSortByType(int _zoneViewSortByType);
+        void setCardInfoFontSize(int _cardInfoFontSize);
 };
 
 extern SettingsCache *settingsCache;

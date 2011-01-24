@@ -22,7 +22,7 @@ CardInfoWidget::CardInfoWidget(ResizeMode _mode, QWidget *parent, Qt::WindowFlag
 	cardPicture->setAlignment(Qt::AlignCenter);
 
 	QFont f;
-	f.setPixelSize(11);
+        f.setPixelSize(settingsCache->getCardInfoFontSize());
 
 	nameLabel1 = new QLabel;
 	nameLabel1->setFont(f);
@@ -75,9 +75,9 @@ CardInfoWidget::CardInfoWidget(ResizeMode _mode, QWidget *parent, Qt::WindowFlag
 		setFixedWidth(sizeHint().width());
 		setMinimized(settingsCache->getCardInfoMinimized());
 	} else if (mode == ModePopUp)
-		setFixedWidth(350);
+		setFixedWidth(450);
 	else
-		setFixedWidth(250);
+		setFixedWidth(350);
 	if (mode != ModeDeckEditor)
 		setFixedHeight(sizeHint().height());
 }

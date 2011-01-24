@@ -11,6 +11,7 @@ class QLineEdit;
 class QPushButton;
 class QComboBox;
 class QGroupBox;
+class QSpinBox;
 class QCheckBox;
 class QLabel;
 class QCloseEvent;
@@ -67,7 +68,7 @@ signals:
 private:
 	QLabel *handBgLabel, *stackBgLabel, *tableBgLabel, *playerAreaBgLabel, *cardBackPicturePathLabel;
 	QLineEdit *handBgEdit, *stackBgEdit, *tableBgEdit, *playerAreaBgEdit, *cardBackPicturePathEdit;
-	QCheckBox *horizontalHandCheckBox, *invertVerticalCoordinateCheckBox, *zoneViewSortByNameCheckBox, *zoneViewSortByTypeCheckBox;
+	QCheckBox *horizontalHandCheckBox, *economicalGridCheckBox, *invertVerticalCoordinateCheckBox, *zoneViewSortByNameCheckBox, *zoneViewSortByTypeCheckBox;
 	QGroupBox *zoneBgGroupBox, *handGroupBox, *tableGroupBox, *zoneViewGroupBox;
 public:
 	AppearanceSettingsPage();
@@ -79,6 +80,8 @@ class UserInterfaceSettingsPage : public AbstractSettingsPage {
 private:
 	QCheckBox *doubleClickToPlayCheckBox;
 	QCheckBox *tapAnimationCheckBox;
+        QLabel *cardInfoFontSizeLabel;
+        QSpinBox *cardInfoFontSizeSpinBox;
 	QGroupBox *generalGroupBox, *animationGroupBox;
 public:
 	UserInterfaceSettingsPage();
