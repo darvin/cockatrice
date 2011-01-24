@@ -380,10 +380,15 @@ UserInterfaceSettingsPage::UserInterfaceSettingsPage()
         connect(cardInfoFontSizeSpinBox, SIGNAL(valueChanged(int)), settingsCache, SLOT(setCardInfoFontSize(int)));
 
 
+        cardInfoStrippedCheckBox = new QCheckBox;
+        cardInfoStrippedCheckBox->setChecked(settingsCache->getCardInfoStripped());
+        connect(cardInfoStrippedCheckBox, SIGNAL(stateChanged(int)), settingsCache, SLOT(setCardInfoStripped(int)));
+
 	QGridLayout *generalGrid = new QGridLayout;
 	generalGrid->addWidget(doubleClickToPlayCheckBox, 0, 0);
         generalGrid->addWidget(cardInfoFontSizeLabel, 1, 0);
         generalGrid->addWidget(cardInfoFontSizeSpinBox, 1, 1);
+        generalGrid->addWidget(cardInfoStrippedCheckBox, 2, 0);
 	
 	generalGroupBox = new QGroupBox;
 	generalGroupBox->setLayout(generalGrid);
@@ -412,6 +417,7 @@ void UserInterfaceSettingsPage::retranslateUi()
 	animationGroupBox->setTitle(tr("Animation settings"));
 	tapAnimationCheckBox->setText(tr("&Tap/untap animation"));
         cardInfoFontSizeLabel->setText(tr("Card info font size:"));
+        cardInfoStrippedCheckBox->setText(tr("Show stripped card picture on card info frame"));
 }
 
 MessagesSettingsPage::MessagesSettingsPage()

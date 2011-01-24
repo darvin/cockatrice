@@ -2,6 +2,7 @@
 <cockatrice_setdatabase version="20100416">
         <picture_url>http://www.wizards.com/global/images/magic/general/%1.jpg</picture_url>
         <picture_url_hq>http://mtgpics.chutography.com/%2/%1.full.jpg</picture_url_hq>
+        <picture_url_stripped>http://mtgpics.chutography.com/%2/%1.jpg</picture_url_stripped>
 	<set_url>http://gatherer.wizards.com/Pages/Search/Default.aspx?output=spoiler&amp;method=text&amp;set=[&quot;!longname!&quot;]</set_url>
         <set import="1">
             <name>ARB</name>

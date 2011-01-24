@@ -18,6 +18,10 @@ CardInfoWidget::CardInfoWidget(ResizeMode _mode, QWidget *parent, Qt::WindowFlag
 		connect(minimizeButton, SIGNAL(clicked()), this, SLOT(minimizeClicked()));
 	}
 	
+        //FIXME
+        if ( settingsCache->getCardInfoStripped())
+            aspectRatio = 0.815584416;
+
 	cardPicture = new QLabel;
 	cardPicture->setAlignment(Qt::AlignCenter);
 
@@ -52,7 +56,7 @@ CardInfoWidget::CardInfoWidget(ResizeMode _mode, QWidget *parent, Qt::WindowFlag
 	int row = 0;
 	if (mode == ModeGameTab)
 		grid->addWidget(minimizeButton, row++, 1, 1, 1, Qt::AlignRight);
-	grid->addWidget(cardPicture, row++, 0, 1, 2);
+        grid->addWidget(cardPicture, row++, 0, 1, 2);
 	grid->addWidget(nameLabel1, row, 0);
 	grid->addWidget(nameLabel2, row++, 1);
 	grid->addWidget(manacostLabel1, row, 0);
@@ -133,11 +137,11 @@ void CardInfoWidget::setCard(AbstractCardItem *card)
 
 void CardInfoWidget::updatePixmap()
 {
-	QPixmap *resizedPixmap = info->getPixmap(QSize(pixmapWidth, pixmapWidth * aspectRatio));
+        QPixmap *resizedPixmap = info->getPixmap(QSize(pixmapWidth, pixmapWidth * aspectRatio), settingsCache->getCardInfoStripped());
 	if (resizedPixmap)
 		cardPicture->setPixmap(*resizedPixmap);
 	else
-		cardPicture->setPixmap(*(db->getCard()->getPixmap(QSize(pixmapWidth, pixmapWidth * aspectRatio))));
+                cardPicture->setPixmap(*(db->getCard()->getPixmap(QSize(pixmapWidth, pixmapWidth * aspectRatio), settingsCache->getCardInfoStripped())));
 }
 
 void CardInfoWidget::retranslateUi()

@@ -20,6 +20,7 @@ SettingsCache::SettingsCache()
 	picDownload = settings->value("personal/picturedownload", true).toBool();
 	doubleClickToPlay = settings->value("interface/doubleclicktoplay", true).toBool();
         cardInfoFontSize = settings->value("interface/cardinfofontsize", 13).toInt();
+        cardInfoStripped = settings->value("interface/cardinfostripped", true).toBool();
 	cardInfoMinimized = settings->value("interface/cardinfominimized", false).toBool();
 	horizontalHand = settings->value("hand/horizontal", true).toBool();
 	economicalGrid = settings->value("table/economic", false).toBool();
@@ -116,6 +117,13 @@ void SettingsCache::setCardInfoMinimized(bool _cardInfoMinimized)
 	cardInfoMinimized = _cardInfoMinimized;
 	settings->setValue("interface/cardinfominimized", cardInfoMinimized);
 }
+
+void SettingsCache::setCardInfoStripped(int _cardInfoStripped)
+{
+        cardInfoStripped = _cardInfoStripped;
+        settings->setValue("interface/cardinfostripped", cardInfoStripped);
+}
+
 
 void SettingsCache::setHorizontalHand(int _horizontalHand)
 {

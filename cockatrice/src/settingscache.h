@@ -35,6 +35,7 @@ private:
 	bool tapAnimation;
 	bool zoneViewSortByName, zoneViewSortByType;
         int cardInfoFontSize;
+        bool cardInfoStripped;
 public:
 	SettingsCache();
 	QString getLang() const { return lang; }
@@ -56,6 +57,7 @@ public:
 	bool getZoneViewSortByName() const { return zoneViewSortByName; }
 	bool getZoneViewSortByType() const { return zoneViewSortByType; }
         int getCardInfoFontSize() const { return cardInfoFontSize; }
+        bool getCardInfoStripped() const { return cardInfoStripped; }
 public slots:
 	void setLang(const QString &_lang);
 	void setDeckPath(const QString &_deckPath);
@@ -76,6 +78,8 @@ public slots:
 	void setZoneViewSortByName(int _zoneViewSortByName);
 	void setZoneViewSortByType(int _zoneViewSortByType);
         void setCardInfoFontSize(int _cardInfoFontSize);
+        void setCardInfoStripped(int _cardInfoStripped);
+
 };
 
 extern SettingsCache *settingsCache;

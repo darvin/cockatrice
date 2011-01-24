@@ -61,6 +61,8 @@ void OracleImporter::readSetsFromXml(QXmlStreamReader &xml)
 			pictureUrl = xml.readElementText();
                 else if (xml.name() == "picture_url_hq")
                         pictureUrlHq = xml.readElementText();
+                else if (xml.name() == "picture_url_stripped")
+                        pictureUrlStripped = xml.readElementText();
 		else if (xml.name() == "set_url")
 			setUrl = xml.readElementText();
 	}
@@ -113,8 +115,10 @@ CardInfo *OracleImporter::addCard(QString cardName, const QString &cardCost, con
 		
 		card = new CardInfo(this, cardName, cardCost, cardType, cardPT, fullCardText, colors, cipt);
 
-                card->setPicURL(getURLFromNameAndCardSet(cardName, setShortName, false));
-                card->setPicHqURL(getURLFromNameAndCardSet(cardName, setShortName, true));
+                card->setPicURL(getURLFromNameAndCardSet(cardName, setShortName, false, pictureUrl));
+                card->setPicHqURL(getURLFromNameAndCardSet(cardName, setShortName, true, pictureUrlHq));
+                card->setPicStURL(getURLFromNameAndCardSet(cardName, setShortName, true, pictureUrlStripped));
+
 
 		int tableRow = 1;
 		QString mainCardType = card->getMainCardType();
@@ -196,7 +200,7 @@ int OracleImporter::importTextSpoiler(CardSet *set, const QByteArray &data)
 	return cards;
 }
 
-QString OracleImporter::getURLFromNameAndCardSet(QString name, QString setName, bool hq) const
+QString OracleImporter::getURLFromNameAndCardSet(QString name, QString setName, bool hq, QString baseUrl) const
 {
         QString simpleName = name
                              .replace("Æther", "Aether")
@@ -212,10 +216,8 @@ QString OracleImporter::getURLFromNameAndCardSet(QString name, QString setName, 
                          .remove('.')
                          .replace(' ', '_')
                          .replace('-', '_');
-            return pictureUrl.arg(simpleName, setName);
         }
-        else
-            return pictureUrlHq.arg(simpleName, setName);
+        return baseUrl.arg(simpleName, setName);
 
 }
 

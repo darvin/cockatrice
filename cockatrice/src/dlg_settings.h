@@ -82,6 +82,7 @@ private:
 	QCheckBox *tapAnimationCheckBox;
         QLabel *cardInfoFontSizeLabel;
         QSpinBox *cardInfoFontSizeSpinBox;
+        QCheckBox *cardInfoStrippedCheckBox;
 	QGroupBox *generalGroupBox, *animationGroupBox;
 public:
 	UserInterfaceSettingsPage();
