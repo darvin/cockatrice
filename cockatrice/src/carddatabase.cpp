@@ -116,8 +116,8 @@ void PictureLoadingThread::setPicsPath(const QString &path)
 	_picsPath = path;
 }
 
-CardInfo::CardInfo(CardDatabase *_db, const QString &_name, const QString &_manacost, const QString &_cardtype, const QString &_powtough, const QString &_text, const QStringList &_colors, bool _cipt, int _tableRow, const SetList &_sets, const QString &_picURL)
-	: db(_db), name(_name), sets(_sets), manacost(_manacost), cardtype(_cardtype), powtough(_powtough), text(_text), colors(_colors), picURL(_picURL), cipt(_cipt), tableRow(_tableRow), pixmap(NULL)
+CardInfo::CardInfo(CardDatabase *_db, const QString &_name, const QString &_manacost, const QString &_cardtype, const QString &_powtough, const QString &_text, const QStringList &_colors, bool _cipt, int _tableRow, const SetList &_sets, const QString &_picURL, const QString &_picHqURL)
+        : db(_db), name(_name), sets(_sets), manacost(_manacost), cardtype(_cardtype), powtough(_powtough), text(_text), colors(_colors), picURL(_picURL), picHqURL(_picHqURL), cipt(_cipt), tableRow(_tableRow), pixmap(NULL)
 {
 	for (int i = 0; i < sets.size(); i++)
 		sets[i]->append(this);
@@ -269,6 +269,7 @@ QXmlStreamWriter &operator<<(QXmlStreamWriter &xml, const CardInfo *info)
 	xml.writeTextElement("tablerow", QString::number(info->getTableRow()));
 	xml.writeTextElement("text", info->getText());
 	xml.writeTextElement("picURL", info->getPicURL());
+        xml.writeTextElement("picHqURL", info->getPicHqURL());
 	if (info->getCipt())
 		xml.writeTextElement("cipt", "1");
 	xml.writeEndElement(); // card
@@ -277,7 +278,7 @@ QXmlStreamWriter &operator<<(QXmlStreamWriter &xml, const CardInfo *info)
 }
 
 CardDatabase::CardDatabase(QObject *parent)
-	: QObject(parent), downloadRunning(false), loadSuccess(false), noCard(0)
+        : QObject(parent), downloadRunning(false), failLQ(false), loadSuccess(false), noCard(0)
 {
 	connect(settingsCache, SIGNAL(picsPathChanged()), this, SLOT(clearPixmapCache()));
 	connect(settingsCache, SIGNAL(cardDatabasePathChanged()), this, SLOT(loadCardDatabase()));
@@ -382,16 +383,16 @@ void CardDatabase::startPicDownload(CardInfo *card)
 
 void CardDatabase::startNextPicDownload()
 {
-	if (cardsToDownload.isEmpty()) {
+        if (cardsToDownload.isEmpty()) { //FIXME
 		cardBeingDownloaded = 0;
 		downloadRunning = false;
 		return;
 	}
 	
 	downloadRunning = true;
-	
+        failLQ = false;
 	cardBeingDownloaded = cardsToDownload.takeFirst();
-	QNetworkRequest req(QUrl(cardBeingDownloaded->getPicURL()));
+        QNetworkRequest req(QUrl(cardBeingDownloaded->getPicHqURL()));
 	networkManager->get(req);
 }
 
@@ -414,10 +415,19 @@ void CardDatabase::picDownloadFinished(QNetworkReply *reply)
 		newPic.close();
 		
 		cardBeingDownloaded->updatePixmapCache();
+
+                reply->deleteLater();
+                startNextPicDownload();
 	}
-	
-	reply->deleteLater();
-	startNextPicDownload();
+        else if (!failLQ) {
+            failLQ = true;
+            QNetworkRequest req(QUrl(cardBeingDownloaded->getPicURL()));
+            networkManager->get(req);
+        }
+        else {
+            reply->deleteLater();
+            startNextPicDownload();
+        }
 }
 
 void CardDatabase::loadSetsFromXml(QXmlStreamReader &xml)
@@ -446,7 +456,7 @@ void CardDatabase::loadCardsFromXml(QXmlStreamReader &xml)
 		if (xml.readNext() == QXmlStreamReader::EndElement)
 			break;
 		if (xml.name() == "card") {
-			QString name, manacost, type, pt, text, picURL;
+                        QString name, manacost, type, pt, text, picURL, picHqURL;
 			QStringList colors;
 			SetList sets;
 			int tableRow = 0;
@@ -472,10 +482,12 @@ void CardDatabase::loadCardsFromXml(QXmlStreamReader &xml)
 					tableRow = xml.readElementText().toInt();
 				else if (xml.name() == "picURL")
 					picURL = xml.readElementText();
+                                else if (xml.name() == "picHqURL")
+                                        picHqURL = xml.readElementText();
 				else if (xml.name() == "cipt")
 					cipt = (xml.readElementText() == "1");
 			}
-			cardHash.insert(name, new CardInfo(this, name, manacost, type, pt, text, colors, cipt, tableRow, sets, picURL));
+                        cardHash.insert(name, new CardInfo(this, name, manacost, type, pt, text, colors, cipt, tableRow, sets, picURL, picHqURL));
 		}
 	}
 }

@@ -36,7 +36,7 @@ void OracleImporter::readSetsFromXml(QXmlStreamReader &xml)
 {
 	allSets.clear();
 	
-	QString edition;
+        QString edition;
 	QString editionLong;
 	QString editionURL;
 	while (!xml.atEnd()) {
@@ -59,12 +59,14 @@ void OracleImporter::readSetsFromXml(QXmlStreamReader &xml)
 			edition = editionLong = editionURL = QString();
 		} else if (xml.name() == "picture_url")
 			pictureUrl = xml.readElementText();
+                else if (xml.name() == "picture_url_hq")
+                        pictureUrlHq = xml.readElementText();
 		else if (xml.name() == "set_url")
 			setUrl = xml.readElementText();
 	}
 }
 
-CardInfo *OracleImporter::addCard(QString cardName, const QString &cardCost, const QString &cardType, const QString &cardPT, const QStringList &cardText)
+CardInfo *OracleImporter::addCard(QString cardName, const QString &cardCost, const QString &cardType, const QString &cardPT, const QStringList &cardText, const QString setShortName)
 {
 	QString fullCardText = cardText.join("\n");
 	bool splitCard = false;
@@ -110,7 +112,10 @@ CardInfo *OracleImporter::addCard(QString cardName, const QString &cardCost, con
 		bool cipt = (cardText.contains(cardName + " enters the battlefield tapped."));
 		
 		card = new CardInfo(this, cardName, cardCost, cardType, cardPT, fullCardText, colors, cipt);
-		card->setPicURL(getURLFromName(cardName));
+
+                card->setPicURL(getURLFromNameAndCardSet(cardName, setShortName, false));
+                card->setPicHqURL(getURLFromNameAndCardSet(cardName, setShortName, true));
+
 		int tableRow = 1;
 		QString mainCardType = card->getMainCardType();
 		if ((mainCardType == "Land") || mArtifact)
@@ -163,7 +168,7 @@ int OracleImporter::importTextSpoiler(CardSet *set, const QByteArray &data)
 					for (int i = 0; i < cardTextSplit.size(); ++i)
 						cardTextSplit[i] = cardTextSplit[i].trimmed();
 					
-					CardInfo *card = addCard(cardName, cardCost, cardType, cardPT, cardTextSplit);
+                                        CardInfo *card = addCard(cardName, cardCost, cardType, cardPT, cardTextSplit, set->getShortName());
 					if (!set->contains(card)) {
 						card->addToSet(set);
 						cards++;
@@ -191,22 +196,27 @@ int OracleImporter::importTextSpoiler(CardSet *set, const QByteArray &data)
 	return cards;
 }
 
-QString OracleImporter::getURLFromName(QString name) const
+QString OracleImporter::getURLFromNameAndCardSet(QString name, QString setName, bool hq) const
 {
-	return pictureUrl.arg(
-		name
-                .replace("Æther", "Aether")
-		.replace("ö", "o")
-		.remove('\'')
-		.remove("//")
-		.remove(',')
-		.remove(':')
-		.remove('.')
-		.remove(QRegExp("\\(.*\\)"))
-		.simplified()
-		.replace(' ', '_')
-		.replace('-', '_')
-	);
+        QString simpleName = name
+                             .replace("Æther", "Aether")
+                             .replace("ö", "o")
+                             .remove('\'')
+                             .remove("//")
+                             .remove(QRegExp("\\(.*\\)"))
+                             .simplified();
+
+        if (!hq) {
+            simpleName = simpleName.remove(',')
+                         .remove(':')
+                         .remove('.')
+                         .replace(' ', '_')
+                         .replace('-', '_');
+            return pictureUrl.arg(simpleName, setName);
+        }
+        else
+            return pictureUrlHq.arg(simpleName, setName);
+
 }
 
 int OracleImporter::startDownload()

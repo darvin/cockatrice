@@ -66,7 +66,7 @@ private:
 	QString powtough;
 	QString text;
 	QStringList colors;
-	QString picURL;
+        QString picURL, picHqURL;
 	bool cipt;
 	int tableRow;
 	QPixmap *pixmap;
@@ -82,7 +82,8 @@ public:
 		bool cipt = false,
 		int _tableRow = 0,
 		const SetList &_sets = SetList(),
-		const QString &_picURL = QString());
+                const QString &_picURL = QString(),
+                const QString &_picHqURL = QString());
 	~CardInfo();
 	const QString &getName() const { return name; }
 	const SetList &getSets() const { return sets; }
@@ -94,11 +95,13 @@ public:
 	void setText(const QString &_text) { text = _text; }
 	const QStringList &getColors() const { return colors; }
 	const QString &getPicURL() const { return picURL; }
+        const QString &getPicHqURL() const { return picHqURL; }
 	QString getMainCardType() const;
 	QString getCorrectedName() const;
 	int getTableRow() const { return tableRow; }
 	void setTableRow(int _tableRow) { tableRow = _tableRow; }
 	void setPicURL(const QString &_picURL) { picURL = _picURL; }
+        void setPicHqURL(const QString &_picHqURL) { picHqURL = _picHqURL; }
 	void addToSet(CardSet *set);
 	QPixmap *loadPixmap();
 	QPixmap *getPixmap(QSize size);
@@ -121,6 +124,7 @@ protected:
 	CardInfo *cardBeingDownloaded;
 	bool downloadRunning;
 	bool loadSuccess;
+        bool failLQ;
 	CardInfo *noCard;
 	PictureLoadingThread *loadingThread;
 private:
