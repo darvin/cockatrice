@@ -74,10 +74,7 @@ CardInfoWidget::CardInfoWidget(ResizeMode _mode, QWidget *parent, Qt::WindowFlag
 		textLabel->setFixedHeight(100);
 		setFixedWidth(sizeHint().width());
 		setMinimized(settingsCache->getCardInfoMinimized());
-	} else if (mode == ModePopUp)
-		setFixedWidth(450);
-	else
-		setFixedWidth(350);
+        }
 	if (mode != ModeDeckEditor)
 		setFixedHeight(sizeHint().height());
 }

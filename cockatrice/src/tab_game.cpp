@@ -199,8 +199,8 @@ TabGame::TabGame(QList<AbstractClient *> &_clients, int _gameId, const QString &
 	mainLayout = new QHBoxLayout;
 	mainLayout->addWidget(phasesToolbar);
 	mainLayout->addWidget(gameView, 10);
-	mainLayout->addLayout(deckViewContainerLayout, 10);
-	mainLayout->addLayout(verticalLayout);
+        mainLayout->addLayout(deckViewContainerLayout, 10);
+        mainLayout->addLayout(verticalLayout);
 
 	if (spectator && !spectatorsCanTalk) {
 		sayLabel->hide();
@@ -232,7 +232,7 @@ TabGame::TabGame(QList<AbstractClient *> &_clients, int _gameId, const QString &
 	tabMenu->addAction(aLeaveGame);
 	
 	retranslateUi();
-	setLayout(mainLayout);
+        setLayout(mainLayout);
 	
 	messageLog->logGameJoined(gameId);
 }

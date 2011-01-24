@@ -3,6 +3,7 @@
 #include <QTreeView>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QSplitter>
 #include <QToolBar>
 #include <QTextEdit>
 #include <QMenu>
@@ -122,14 +123,18 @@ WndDeckEditor::WndDeckEditor(QWidget *parent)
 	rightFrame->addLayout(grid);
 	rightFrame->addWidget(deckView);
 
-	QHBoxLayout *mainLayout = new QHBoxLayout;
-	mainLayout->addLayout(leftFrame, 10);
-	mainLayout->addLayout(middleFrame);
-	mainLayout->addLayout(rightFrame, 10);
+        QSplitter *mainSplitter = new QSplitter;
+        QWidget *leftFrameWidget = new QWidget;
+        leftFrameWidget->setLayout(leftFrame);
+        mainSplitter->addWidget(leftFrameWidget);
+        QWidget *middleFrameWidget = new QWidget;
+        middleFrameWidget->setLayout(middleFrame);
+        mainSplitter->addWidget(middleFrameWidget);
+        QWidget *rightFrameWidget = new QWidget;
+        rightFrameWidget->setLayout(rightFrame);
+        mainSplitter->addWidget(rightFrameWidget);
 
-	QWidget *centralWidget = new QWidget;
-	centralWidget->setLayout(mainLayout);
-	setCentralWidget(centralWidget);
+        setCentralWidget(mainSplitter);
 
 	setWindowTitle(tr("Deck editor [*]"));
 
